@@ -3,610 +3,512 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>A Tiny Birthday Archive</title>
+  <title>Archive of Our History</title>
   <style>
     :root {
-      --bg: #f6f3ef;
-      --paper: #fffdf9;
-      --paper-2: #fdf8f2;
-      --ink: #222;
+      --bg: #f6f6f6;
+      --paper: #fff;
+      --text: #2a2a2a;
       --muted: #666;
-      --line: #d6cfc6;
-      --accent: #9c2f2f;
-      --accent-soft: #f0d9d9;
-      --tag-bg: #efe9e2;
-      --shadow: 0 10px 30px rgba(0,0,0,0.10);
-      --tumblr-blue: #31465f;
-      --gold: #b18a4b;
+      --line: #ccc;
+      --line-soft: #ddd;
+      --red: #900;
+      --red-dark: #6f0000;
+      --red-soft: #f9ecec;
+      --tag-bg: #eee;
+      --tag-border: #bbb;
+      --note-bg: #ffffdd;
+      --note-border: #d8d38f;
+      --button-bg: #f3f3f3;
+      --button-border: #aaa;
       --maxw: 980px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.15);
+      --sans: Arial, Helvetica, sans-serif;
+      --serif: Georgia, "Times New Roman", serif;
     }
 
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-
+    html { font-size: 100%; }
     body {
       margin: 0;
-      background:
-        radial-gradient(circle at top left, rgba(255,255,255,0.7), transparent 35%),
-        linear-gradient(180deg, #f8f5f1 0%, #f3eee8 100%);
-      color: var(--ink);
-      font-family: Georgia, "Times New Roman", serif;
-      line-height: 1.55;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.5 var(--serif);
     }
 
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
+    a { color: var(--red); text-decoration: none; }
+    a:hover, a:focus { text-decoration: underline; }
 
-    .topbar {
-      background: linear-gradient(180deg, #3b526e, #2f4258);
-      color: #f4f7fb;
-      border-bottom: 3px solid #213042;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.95rem;
+    .site-header {
+      background: linear-gradient(#b31a1a, #8c0000);
+      border-bottom: 1px solid #5b0000;
+      color: #fff;
+      font-family: var(--sans);
     }
 
-    .topbar-inner {
+    .site-header-inner,
+    .page {
       max-width: var(--maxw);
       margin: 0 auto;
-      padding: 0.9rem 1rem;
+      padding: 0 12px;
+    }
+
+    .site-header-inner {
       display: flex;
-      justify-content: space-between;
-      gap: 1rem;
       align-items: center;
+      justify-content: space-between;
+      gap: 12px;
       flex-wrap: wrap;
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
 
-    .brand {
+    .branding {
+      font-size: 1.4rem;
       font-weight: 700;
-      letter-spacing: 0.03em;
-      text-transform: lowercase;
+      letter-spacing: 0.01em;
+      line-height: 1.1;
     }
 
-    .brand span { color: #f0c6c6; }
+    .branding small {
+      display: inline-block;
+      font-size: 0.76rem;
+      font-weight: 400;
+      margin-left: 6px;
+      opacity: 0.94;
+    }
 
-    .top-links {
+    .top-nav {
       display: flex;
-      gap: 1rem;
       flex-wrap: wrap;
-      opacity: 0.95;
-    }
-
-    .wrap {
-      max-width: var(--maxw);
-      margin: 0 auto;
-      padding: 1.25rem 1rem 4rem;
-    }
-
-    .crumbs {
-      font-family: Arial, Helvetica, sans-serif;
+      gap: 12px;
       font-size: 0.92rem;
-      color: var(--muted);
-      margin: 0.35rem 0 1rem;
     }
 
-    .site-note {
-      background: #fff7db;
-      border: 1px solid #e5d28f;
-      color: #5f4b11;
-      padding: 0.8rem 1rem;
-      border-radius: 6px;
-      font-family: Arial, Helvetica, sans-serif;
-      margin-bottom: 1rem;
-      box-shadow: var(--shadow);
+    .top-nav a { color: #fff; }
+
+    .page {
+      padding-top: 14px;
+      padding-bottom: 36px;
+    }
+
+    .breadcrumbs,
+    .stats,
+    .work-navigation,
+    .footer,
+    .system-note {
+      font-family: var(--sans);
+    }
+
+    .breadcrumbs {
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .system-note {
+      margin: 0 0 12px;
+      padding: 8px 10px;
+      border: 1px solid var(--note-border);
+      background: var(--note-bg);
+      font-size: 0.93rem;
     }
 
     .work {
+      border: 1px solid var(--line);
       background: var(--paper);
-      border: 1px solid #cfc7bc;
       box-shadow: var(--shadow);
     }
 
-    .work-header {
-      padding: 1.4rem 1.25rem 1rem;
-      border-bottom: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(250,246,240,0.95));
-    }
-
-    .gift-tag {
-      display: inline-block;
-      margin-bottom: 0.6rem;
-      background: var(--accent-soft);
-      color: #6f1d1d;
-      border: 1px solid #d9a8a8;
-      padding: 0.25rem 0.55rem;
-      border-radius: 999px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.82rem;
-      font-weight: 700;
-      letter-spacing: 0.02em;
-      text-transform: lowercase;
+    .title-block {
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid var(--line-soft);
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(1.8rem, 4vw, 2.7rem);
+      color: var(--red);
+      text-align: center;
+      font-size: 1.95rem;
       line-height: 1.15;
-      color: #171717;
+      font-weight: 400;
     }
 
     .byline {
-      margin-top: 0.35rem;
-      font-size: 1.02rem;
+      margin-top: 4px;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    .gift-for {
+      margin-left: 8px;
+      color: var(--muted);
+      font-size: 0.95rem;
     }
 
     .summary {
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--line);
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--line-soft);
     }
 
-    .label { font-weight: 700; color: #3b3b3b; }
+    .summary strong,
+    .meta dt,
+    .notes h2,
+    .end-notes h2,
+    .chapter-title {
+      font-family: var(--sans);
+    }
 
     .meta {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 0.8rem;
-      padding: 1rem 1.25rem;
-      border-bottom: 1px solid var(--line);
-      background: var(--paper-2);
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--line-soft);
     }
+
+    .meta dl { margin: 0; }
 
     .meta-row {
       display: grid;
-      grid-template-columns: 12rem 1fr;
-      gap: 0.75rem;
-      align-items: start;
+      grid-template-columns: 185px 1fr;
+      gap: 10px;
+      padding: 4px 0;
     }
 
-    .meta-key {
-      font-family: Arial, Helvetica, sans-serif;
+    .meta dt {
+      margin: 0;
       color: #444;
+      font-size: 0.95rem;
       font-weight: 700;
-      font-size: 0.94rem;
     }
+
+    .meta dd { margin: 0; }
 
     .tags {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.45rem;
+      gap: 6px;
     }
 
     .tag {
       display: inline-block;
-      padding: 0.26rem 0.55rem;
+      padding: 2px 8px;
+      border: 1px solid var(--tag-border);
       background: var(--tag-bg);
-      border: 1px solid #ddd2c4;
-      border-radius: 999px;
+      border-radius: 14px;
+      line-height: 1.3;
       font-size: 0.92rem;
-      line-height: 1.2;
+      white-space: nowrap;
     }
 
-    .stats {
-      padding: 0.95rem 1.25rem;
-      border-bottom: 1px solid var(--line);
+    .stats,
+    .work-navigation {
       display: flex;
-      gap: 1rem;
       flex-wrap: wrap;
-      font-family: Arial, Helvetica, sans-serif;
+      gap: 12px;
+      padding: 8px 18px;
+      border-bottom: 1px solid var(--line-soft);
+      background: #fafafa;
       color: #555;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
+    }
+
+    .work-navigation { justify-content: space-between; }
+    .nav-left, .nav-right {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .notes {
-      margin: 1.1rem 1.25rem 0;
-      padding: 0.95rem 1rem;
-      border: 1px dashed #d4b9b9;
-      background: #fff8f8;
-      position: relative;
+      margin: 16px 18px 0;
+      padding: 10px 12px;
+      border: 1px solid var(--note-border);
+      background: var(--note-bg);
     }
 
-    .notes::before {
-      content: "author's note";
-      position: absolute;
-      top: -0.72rem;
-      left: 0.8rem;
-      background: var(--paper);
-      padding: 0 0.45rem;
-      color: var(--accent);
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: lowercase;
-      letter-spacing: 0.04em;
+    .notes h2,
+    .end-notes h2 {
+      margin: 0 0 8px;
+      color: var(--red);
+      font-size: 1.05rem;
+      font-weight: 400;
     }
 
-    .content { padding: 1.3rem 1.25rem 1.8rem; }
-    .intro { margin-bottom: 1.5rem; font-size: 1.03rem; }
-
-    .divider {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin: 2rem 0 1.2rem;
-      color: #7b7b7b;
-      font-family: Arial, Helvetica, sans-serif;
-      text-transform: lowercase;
-      letter-spacing: 0.04em;
-      font-size: 0.86rem;
+    .content {
+      padding: 18px;
     }
 
-    .divider::before,
-    .divider::after {
-      content: "";
-      height: 1px;
-      background: var(--line);
-      flex: 1;
+    .chapter-title {
+      margin: 0 0 12px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--line-soft);
+      color: var(--red);
+      font-size: 1.1rem;
+      font-weight: 400;
     }
 
-    .polaroid-grid {
+    .content p { margin: 0 0 1rem; }
+
+    .story-sequence {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 2rem 1.25rem;
-      align-items: start;
+      gap: 26px;
+      margin-top: 20px;
     }
 
-    .polaroid {
-      background: #fff;
-      border: 1px solid #ddd;
-      box-shadow: 0 16px 28px rgba(0,0,0,0.14);
-      padding: 0.8rem 0.8rem 1.9rem;
+    .story-entry {
       position: relative;
-      transition: transform 180ms ease, box-shadow 180ms ease;
+      padding: 0 0 26px 22px;
+      border-bottom: 1px solid var(--line-soft);
     }
 
-    .polaroid:hover {
-      transform: translateY(-2px) rotate(0deg) scale(1.01);
-      box-shadow: 0 20px 34px rgba(0,0,0,0.16);
+    .story-entry:last-child {
+      padding-bottom: 0;
+      border-bottom: none;
     }
 
-    .polaroid.left { transform: rotate(-2.3deg); }
-    .polaroid.right { transform: rotate(2.1deg); }
-    .polaroid.flat { transform: rotate(-0.4deg); }
-
-    .tape::before,
-    .tape::after {
+    .story-entry::before {
       content: "";
       position: absolute;
-      width: 4.2rem;
-      height: 1.1rem;
-      background: rgba(244, 232, 183, 0.72);
-      border: 1px solid rgba(183, 170, 122, 0.4);
-      top: -0.48rem;
-      z-index: 2;
+      left: 4px;
+      top: 0.4rem;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, #c8a0a0 0%, #ead7d7 70%, transparent 100%);
     }
 
-    .tape::before { left: 1rem; transform: rotate(-7deg); }
-    .tape::after { right: 1rem; transform: rotate(8deg); }
+    .story-kicker {
+      position: relative;
+      margin: 0 0 10px;
+      font: 0.78rem/1.2 var(--sans);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
 
-    .img-frame {
-      background: linear-gradient(180deg, #f3f3f3, #e9e9e9);
+    .story-kicker::before {
+      content: "";
+      position: absolute;
+      left: -22px;
+      top: 0.15rem;
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--red);
+      box-shadow: 0 0 0 4px var(--red-soft);
+    }
+
+    .story-frame {
+      border: 1px solid #d8d8d8;
+      background: #fff;
+      padding: 12px 12px 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    .image-box {
+      width: fit-content;
+      max-width: 100%;
+      margin: 0 auto;
       border: 1px solid #cfcfcf;
-      min-height: 260px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: #f0f0f0;
       overflow: hidden;
     }
 
-    .img-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .image-box img {
       display: block;
+      width: auto;
+      max-width: 100%;
+      height: auto;
     }
 
-    .placeholder {
-      padding: 1.2rem;
-      text-align: center;
-      color: #6e6e6e;
-      font-family: Arial, Helvetica, sans-serif;
+    .story-copy {
+      max-width: 720px;
+      margin-top: 14px;
     }
 
     .caption {
-      text-align: center;
-      margin-top: 0.85rem;
-      font-size: 1rem;
-      letter-spacing: 0.02em;
+      margin: 0;
+      color: var(--red);
+      font: 400 1.18rem/1.25 var(--sans);
     }
 
-    .subcap {
-      text-align: center;
-      margin-top: 0.25rem;
+    .subcaption {
+      margin: 6px 0 0;
       color: var(--muted);
-      font-size: 0.92rem;
       font-style: italic;
-    }
-
-    .curator-note {
-      margin-top: 0.8rem;
-      padding-top: 0.8rem;
-      border-top: 1px dashed #d8d0c6;
       font-size: 0.95rem;
     }
 
-    .mini-tagline {
-      margin-top: 0.4rem;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.78rem;
-      color: #8a6f32;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+    .memory-note {
+      margin: 12px 0 0;
+      padding-top: 12px;
+      border-top: 1px dotted #cfcfcf;
+      font-size: 1rem;
     }
 
     .callout {
-      margin: 2rem 0;
-      padding: 1rem 1rem 1rem 1.1rem;
-      background: linear-gradient(180deg, #fffdf5, #fffaf0);
-      border-left: 4px solid var(--gold);
-      border: 1px solid #eadbbd;
-      box-shadow: var(--shadow);
+      margin: 20px 0;
+      padding: 10px 12px;
+      border-left: 4px solid #bbb;
+      background: #f8f8f8;
     }
 
-    .fake-post {
-      margin: 2rem 0;
-      border: 1px solid #c8d1db;
-      background: #fbfcfe;
-      box-shadow: var(--shadow);
-      overflow: hidden;
+    .end-notes {
+      margin-top: 22px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line-soft);
     }
 
-    .fake-post-head {
-      background: var(--tumblr-blue);
-      color: #f1f5f9;
-      padding: 0.8rem 1rem;
-      font-family: Arial, Helvetica, sans-serif;
+    .actions {
+      margin-top: 14px;
       display: flex;
-      justify-content: space-between;
-      gap: 1rem;
       flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .fake-post-body { padding: 1rem; }
-
-    .post-tags {
-      margin-top: 0.9rem;
-      color: #52677f;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.92rem;
-    }
-
-    .closing {
-      margin-top: 2rem;
-      padding: 1.25rem 1rem;
-      background: #faf6f0;
-      border: 1px solid var(--line);
-      text-align: center;
-    }
-
-    .fake-actions {
-      margin-top: 1.5rem;
-      display: flex;
-      justify-content: center;
-      gap: 0.7rem;
-      flex-wrap: wrap;
-      font-family: Arial, Helvetica, sans-serif;
+      gap: 10px;
     }
 
     .action-btn {
-      background: #fff;
-      color: var(--accent);
-      border: 1px solid #d4b7b7;
-      border-radius: 999px;
-      padding: 0.55rem 0.95rem;
+      border: 1px solid var(--button-border);
+      background: var(--button-bg);
+      color: #333;
+      padding: 6px 10px;
       cursor: pointer;
-      font: inherit;
-      transition: transform 120ms ease, background 120ms ease;
+      font: 0.92rem var(--sans);
     }
 
-    .action-btn:hover {
-      background: #fff8f8;
-      transform: translateY(-1px);
-    }
+    .action-btn:hover,
+    .action-btn:focus { background: #eee; }
 
-    .tiny {
+    #response {
+      margin-top: 10px;
       color: var(--muted);
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 0.83rem;
+      font: 0.9rem var(--sans);
     }
 
     .footer {
-      padding: 1rem 1.25rem 1.5rem;
+      padding: 12px 18px 18px;
       color: var(--muted);
-      font-family: Arial, Helvetica, sans-serif;
       font-size: 0.85rem;
     }
 
     @media (max-width: 760px) {
       .meta-row { grid-template-columns: 1fr; }
-      .polaroid-grid { grid-template-columns: 1fr; }
-      .work-header, .meta, .content, .stats, .footer { padding-left: 1rem; padding-right: 1rem; }
-      .img-frame { min-height: 220px; }
+      .work-navigation { justify-content: flex-start; }
+      .nav-left, .nav-right { width: 100%; }
+      h1 { font-size: 1.72rem; }
+      .story-entry { padding-left: 18px; }
+      .story-kicker::before { left: -18px; }
+      .story-frame { padding: 10px 10px 14px; }
     }
   </style>
 </head>
 <body>
-  <div class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">archive of <span>birthday-grade</span> feelings</div>
-      <div class="top-links">
-        <span>dashboard</span>
-        <span>bookmarks</span>
-        <span>my absolutely normal emotions</span>
-      </div>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <div class="branding">Archive of Our History</div>
+      <nav class="top-nav" aria-label="Site navigation">
+        <a href="#">Fandoms</a>
+        <a href="#">Browse</a>
+        <a href="#">Search</a>
+        <a href="#">About</a>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <main class="wrap">
-    <div class="crumbs">Fandoms &gt; Birthday Gifts &gt; Curated Emotional Damage &gt; This One Is For You</div>
-
-    <div class="site-note">
-      This page contains art, shared history, and very stupid references.
-    </div>
+  <main class="page">
+    <div class="breadcrumbs">Archive of History &gt; Gifts &gt; Shared Lore &gt; This Work</div>
+    <div class="system-note">This work contains commissioned art, shared history, and references.</div>
 
     <article class="work">
-      <header class="work-header">
-        <div class="gift-tag">gift exchange: me → you</div>
+      <section class="title-block">
         <h1>4 images recovered from the archive of us</h1>
-        <div class="byline">by <a href="#">your dumb friend</a> &nbsp; <span class="tiny">for Orcapine</span></div>
-
-        <div class="summary">
-          <div><span class="label">Summary:</span> A small hand-curated birthday collection built from shared memories, inside jokes, and a walk down memory lane.</div>
-        </div>
-      </header>
-
-      <section class="meta">
-        <div class="meta-row">
-          <div class="meta-key">Gift For:</div>
-          <div class="meta-val"><a href="#">Orcapine</a></div>
-        </div>
-
-        <div class="meta-row">
-          <div class="meta-key">Rating:</div>
-          <div class="meta-val">General Audiences</div>
-        </div>
-
-        <div class="meta-row">
-          <div class="meta-key">Archive Warnings:</div>
-          <div class="meta-val">Creator Chose Not To Warn For Wallet-Related Damage</div>
-        </div>
-
-        <div class="meta-row">
-          <div class="meta-key">Additional Tags:</div>
-          <div class="meta-val tags">
-            <span class="tag">birthday gift</span>
-            <span class="tag">commissioned art</span>
-            <span class="tag">walk down memory lane</span>
-            <span class="tag">shared lore</span>
-            <span class="tag">friendship</span>
-            <span class="tag">more than meets the eye</span>
-            <span class="tag">it fills you with determination</span>
-            <span class="tag">style points for presentation</span>
-            <span class="tag">long-running continuity file</span>
-            <span class="tag">cowabunga</span>
-            <span class="tag">graphically unnecessary but sincere</span>
-          </div>
-        </div>
+        <div class="byline">by <a href="#">your dumb friend</a><span class="gift-for">Gift for <a href="#">Orcapine</a></span></div>
+        <div class="summary"><strong>Summary:</strong> A small hand-curated birthday collection built from shared memories, inside jokes, and a walk down memory lane.</div>
       </section>
 
-      <div class="stats">
-        <span>Published: 14/4/2026</span>
-        <span>Words: 4000-ish words of friendship and remembering</span>
-        <span>Collections: birthday vault 2026</span>
-        <span>Kudos: infinite, ideally</span>
-      </div>
-
-      <section class="notes">
-        <p>Happy birthday. Simply dropping the commissioned art in chat would have been too easy and not nearly dramatic enough, so I made you a tiny archive instead. This is part gallery exhibit and part walk down memory lane built from moments I wanted to keep.</p>
+      <section class="meta" aria-label="Work metadata">
+        <dl>
+          <div class="meta-row"><dt>Rating:</dt><dd>General Audiences</dd></div>
+          <div class="meta-row"><dt>Archive Warning:</dt><dd>Creator Chose Not To Warn For Wallet-Related Damage</dd></div>
+          <div class="meta-row"><dt>Category:</dt><dd>Gen</dd></div>
+          <div class="meta-row"><dt>Additional Tags:</dt><dd><div class="tags"><span class="tag">Birthday Gift</span><span class="tag">Commissioned Art</span><span class="tag">Shared Lore</span><span class="tag">Friendship</span><span class="tag">More Than Meets the Eye</span><span class="tag">It Fills You With Determination</span><span class="tag">Style Points for Presentation</span><span class="tag">Long-Running Continuity File</span><span class="tag">Cowabunga</span><span class="tag">Financially Unwise but Sincere</span></div></dd></div>
+        </dl>
       </section>
+
+      <div class="stats"><span>Published: 14 Apr 2026</span><span>Words: 4,000-ish</span><span>Collections: birthday vault 2026</span><span>Kudos: infinite, ideally</span></div>
+      <div class="work-navigation"><div class="nav-left"><span>Chapter Index</span><span>Comments</span><span>Share</span></div><div class="nav-right"><span>Bookmark</span><span>Mark for Later</span><span>Subscribe</span></div></div>
+
+      <section class="notes"><h2>Author's Note</h2><p>Happy birthday. Simply dropping the commissioned art in chat would have been too easy and not nearly dramatic enough, so I made you a tiny archive instead. This is part gallery exhibit and part walk down memory lane built from moments I wanted to keep.</p></section>
 
       <section class="content">
-        <div class="intro">
-          <p>Below is a lovingly assembled collection of visual evidence, complete with curator's notes, scrapbook annotations, and the general atmosphere of an old Tumblr mutual handing you something carefully made and saying, <em>this felt worth remembering properly</em>.</p>
+
+        <div class="story-sequence">
+          <article class="story-entry">
+            <p class="story-kicker">Scene 1</p>
+            <div class="story-frame">
+              <div class="image-box"><img src="images/art-1.jpg" alt="Commissioned artwork 1" /></div>
+              <div class="story-copy">
+                <h3 class="caption">The Beginning</h3>
+                <p class="subcaption">by @fws.and</p>
+                <p class="memory-note">Do you remember when we first met? Not gonna lie I entered Intro to Psych out of pure curiosity and was a tad pissed at you when you DID'NT SHOW UP FOR OUR FIRST PRESENTATION. But when we were paired up for the second project was when we started getting close and not gonna lie, taking Intro to Psych was one of the best decisions I made! partially cause it was one of the few As I got in my entire Poly career, but also partially cause I met you as a friend!</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="story-entry">
+            <p class="story-kicker">Scene 2</p>
+            <div class="story-frame">
+              <div class="image-box"><img src="images/Chosen one.PNG" alt="Commissioned artwork 2" /></div>
+              <div class="story-copy">
+                <h3 class="caption">Under the Stars</h3>
+                <p class="subcaption">by @keyritine</p>
+                <p class="memory-note">I always appreciated the post movie chats we have at the roof of Vivo, it was just like idk nice to just chat about the movie and other random stuff.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="story-entry">
+            <p class="story-kicker">Scene 3</p>
+            <div class="story-frame">
+              <div class="image-box"><img src="images/artartartart(1).png" alt="Commissioned artwork 3" /></div>
+              <div class="story-copy">
+                <h3 class="caption">By the Bay</h3>
+                <p class="subcaption">by @keiisqn</p>
+                <p class="memory-note">Might be weird to immortalise the most embarassing moment of my life (so far!) But I believe it is worth immortalising I am incredibly greatful that our friendship was strong enough to survive the awkwardness of my horrible confession a lot of other friendships don't but I am very glad ours managed to ride through that rough patch and come out as strong as it ever war.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="story-entry">
+            <p class="story-kicker">Scene 4</p>
+            <div class="story-frame">
+              <div class="image-box"><img src="images/IMG_2987.JPG" alt="Commissioned artwork 4" /></div>
+              <div class="story-copy">
+                <h3 class="caption">Happy Birthday!</h3>
+                <p class="subcaption">@bakugoatbiggestfan</p>
+                <p class="memory-note">Happy Birthday Shorty!</p>
+              </div>
+            </div>
+          </article>
         </div>
 
-        <div class="divider">chapter 1: more than meets the eye</div>
+        <div class="callout"><strong>Supplementary materials:</strong> all selections in this exhibit were chosen under the influence of friendship, memory, obsessive curation, and several distinct eras of mutual brainrot.</div>
 
-        <section class="polaroid-grid">
-          <figure class="polaroid left tape">
-            <div class="img-frame">
-              <img src="images/art-1.jpg" alt="Commissioned artwork 1" />
-            </div>
-            <figcaption class="caption">put your first caption here</figcaption>
-            <div class="subcap">for example: one of the moments i kept meaning to save properly</div>
-            <div class="mini-tagline">curator's note</div>
-            <div class="curator-note">Write a short note here about the memory behind this piece, what moment it points back to, or why you wanted this version of the two of you preserved.</div>
-          </figure>
-
-          <figure class="polaroid right tape">
-            <div class="img-frame">
-              <img src="images/art-2.jpg" alt="Commissioned artwork 2" />
-            </div>
-            <figcaption class="caption">put your second caption here</figcaption>
-            <div class="subcap">for example: restored from a previous timeline, undertale style</div>
-            <div class="mini-tagline">curator's note</div>
-            <div class="curator-note">Another little personal note. This is a good place for an inside joke, a remembered conversation, or a fake museum placard description for a moment the two of you would recognize instantly.</div>
-          </figure>
-
-          <figure class="polaroid flat">
-            <div class="img-frame">
-              <img src="images/art-3.jpg" alt="Commissioned artwork 3" />
-            </div>
-            <figcaption class="caption">put your third caption here</figcaption>
-            <div class="subcap">for example: this one still feels like a save point</div>
-            <div class="mini-tagline">curator's note</div>
-            <div class="curator-note">You can make this one softer and more sentimental if you want the page to gradually feel more like a walk back through your shared history as she scrolls.</div>
-          </figure>
-
-          <figure class="polaroid right">
-            <div class="img-frame">
-              <img src="images/art-4.jpg" alt="Commissioned artwork 4" />
-            </div>
-            <figcaption class="caption">put your fourth caption here</figcaption>
-            <div class="subcap">for example: more than meets the eye, unfortunately</div>
-            <div class="mini-tagline">curator's note</div>
-            <div class="curator-note">Use this space for your most Tumblr-coded sentence. Something a little funny, a little specific, and recognizable to both of you usually lands really well.</div>
-          </figure>
-        </section>
-
-        <div class="callout">
-          <strong>Supplementary materials:</strong> all selections in this exhibit were chosen under the influence of friendship, memory, obsessive curation, and several distinct eras of mutual brainrot.
-        </div>
-
-        <div class="divider">interlude: the kind of post i would have sent you immediately</div>
-
-        <section class="fake-post" aria-label="Tumblr-inspired post block">
-          <div class="fake-post-head">
-            <div><strong>@mutual-of-the-year</strong> · queued with intent</div>
-            <div>✶ 9,214 notes</div>
-          </div>
-          <div class="fake-post-body">
-            <p>sometimes the only sensible response to having years of shared context with someone is commissioning art that turns those memories into something you can actually look at and keep, preferably with style points for presentation, ULTRAKILL-style.</p>
-            <div class="post-tags">#birthday posting #gifted art #walk down memory lane #shared lore #more than meets the eye #determination posting #style points awarded #cowabunga adjacent</div>
-          </div>
-        </section>
-
-        <div class="divider">final chapter: the part worth keeping</div>
-
-        <section class="closing">
-            <p><strong>happy birthday, [her name here]</strong></p>
-            <p>Thank you for being the kind of person who makes elaborate gifts feel necessary. I wanted this to feel like something you could stumble across at 1:00 a.m., grin at immediately, and return to the way people return to favorite posts, favorite fics, and old photos they never quite get tired of.</p>
-            <p>In conclusion, this archive was assembled in your honor, with great care, a long memory, and absolutely no restraint.</p>
-
-            <div class="fake-actions">
-              <button class="action-btn" type="button" onclick="cheer(this)">leave kudos ♡</button>
-              <button class="action-btn" type="button" onclick="reblog(this)">reblog emotionally ↻</button>
-              <button class="action-btn" type="button" onclick="bookmark(this)">bookmark forever ⌘</button>
-            </div>
-            <p id="response" class="tiny" style="margin-top:0.9rem;"></p>
+        <section class="end-notes">
+          <h2>End Notes</h2>
+          <p><strong>Happy birthday, Orcapine.</strong></p>
+          <p>Thank you for being the kind of person who makes elaborate gifts feel necessary. I wanted this to feel like something you could stumble across at 1:00 a.m., grin at immediately, and return to the way people return to favorite posts, favorite fics, and old photos they never quite get tired of.</p>
+          <p>In conclusion, this archive was assembled in your honor, with great care and a long memory.</p>
+          <div class="actions"><button class="action-btn" type="button" onclick="cheer(this)">Leave Kudos</button><button class="action-btn" type="button" onclick="commentBtn(this)">Comment</button><button class="action-btn" type="button" onclick="bookmark(this)">Bookmark</button></div>
+          <p id="response"></p>
         </section>
       </section>
-
-      <footer class="footer">
-        This page is inspired by fandom-era internet aesthetics: archives, tags, mutuals, sideblogs, screenshots saved to camera roll, and the general understanding that some friendships deserve their own lore. You are trusted to get the references without me spelling them out.
-      </footer>
     </article>
   </main>
 
   <script>
-    function setResponse(message) {
-      document.getElementById('response').textContent = message;
-    }
-
-    function cheer(btn) {
-      btn.textContent = 'kudos left ♡';
-      setResponse('Kudos successfully deployed. It fills you with determination.');
-    }
-
-    function reblog(btn) {
-      btn.textContent = 'reblogged with feeling ↻';
-      setResponse('Reblog added to the invisible mutuals timeline in my head. Cowabunga-level continuity remains intact.');
-    }
-
-    function bookmark(btn) {
-      btn.textContent = 'bookmarked forever ⌘';
-      setResponse('Saved under: things made with unreasonable care and curation. More than meets the eye, as usual.');
-    }
+    function setResponse(message) { document.getElementById('response').textContent = message; }
+    function cheer(btn) { btn.textContent = 'Kudos Left'; setResponse('Kudos successfully deployed. It fills you with determination.'); }
+    function commentBtn(btn) { btn.textContent = 'Comment Left'; setResponse('Comment added to the invisible archive in my head. Continuity remains intact.'); }
+    function bookmark(btn) { btn.textContent = 'Bookmarked'; setResponse('Saved under: things made with unreasonable care and curation. More than meets the eye, as usual.'); }
   </script>
 </body>
 </html>
